@@ -30,7 +30,9 @@ import (
 
 func main() {
 	// suppose you want to create one janitor for 100 cache where the janitors will clean all 100 caches expired item after 3 seconds
-	janitorOption := cache.NewJanitorConfigOption(400, time.Second*3)
+	numberOfCachePerJanitor := 100
+	janitorCleanupSchedule := time.Second * 3
+	janitorOption := cache.NewJanitorConfigOption(numberOfCachePerJanitor, janitorCleanupSchedule)
 	janitorPool := cache.NewJanitorPool(janitorOption)
 
 	// now keep creating cache object as much as you want and register it to the janitor pool
@@ -38,6 +40,9 @@ func main() {
 		cache := cache.NewListCacher(time.Second * 1)
 		janitorPool.RegisterCache(cache)
 	}
+	
+	// note : in the above case janitor pool will have 10 janitor looking after 100 caches each
+	
 }
 ```
 ## [Flow](https://www.figma.com/file/0jA2n6fxuDfxCHiIlUrfv1/Cache-Library?type=whiteboard&node-id=0%3A1&t=nWli2bmx50Zhb5F7-1)
